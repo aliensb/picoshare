@@ -1,81 +1,81 @@
 <template id="upload-links-template">
-  <style nonce="{{ .CspNonce }}">
+	  <style nonce="{{ .CspNonce }}">
     .box-wrapper + .box-wrapper {
-      margin-top: 1rem;
-    }
-  </style>
-  <div class="box-wrapper">
-    <upload-link-box id="verbose-link-box">Full Link</upload-link-box>
-  </div>
-  <div class="box-wrapper">
-    <upload-link-box id="short-link-box">Shortlink</upload-link-box>
-  </div>
-  <div class="box-wrapper">
-    <h3>QR Code</h3>
-    <div id="qr-code"></div>
-  </div>
+	          margin-top: 1rem;
+		      }
+      </style>
+        <div class="box-wrapper">
+		    <upload-link-box id="verbose-link-box">Full Link</upload-link-box>
+		      </div>
+		        <div class="box-wrapper">
+				    <upload-link-box id="short-link-box">Shortlink</upload-link-box>
+				      </div>
+				        <div class="box-wrapper">
+						    <h3>QR Code</h3>
+						        <div id="qr-code"></div>
+							  </div>
 </template>
 
 <script type="module" nonce="{{ .CspNonce }}">
-  import { makeShortLink, makeVerboseLink } from "/js/lib/links.js";
-  import QrCreator from "https://cdn.jsdelivr.net/npm/qr-creator/dist/qr-creator.es6.min.js";
+	  import { makeShortLink, makeVerboseLink } from "/js/lib/links.js";
+	    import QrCreator from "https://cdn.jsdelivr.net/npm/qr-creator/dist/qr-creator.es6.min.js";
 
-  (function () {
-    const template = document.querySelector("#upload-links-template");
+	      (function () {
+	          const template = document.querySelector("#upload-links-template");
 
-    customElements.define(
-      "upload-links",
-      class extends HTMLElement {
-        connectedCallback() {
-          this.attachShadow({ mode: "open" }).appendChild(
-            template.content.cloneNode(true)
-          );
-          this.resetLinks();
-        }
+		      customElements.define(
+		            "upload-links",
+			          class extends HTMLElement {
+				          connectedCallback() {
+					            this.attachShadow({ mode: "open" }).appendChild(
+						                template.content.cloneNode(true)
+								          );
+									            this.resetLinks();
+										            }
 
-        get fileId() {
-          return this.getAttribute("file-id");
-        }
+											            get fileId() {
+												              return this.getAttribute("file-id");
+													              }
 
-        set fileId(newValue) {
-          this.setAttribute("file-id", newValue);
-          this.resetLinks();
-        }
+														              set fileId(newValue) {
+															                this.setAttribute("file-id", newValue);
+																	          this.resetLinks();
+																		          }
 
-        get filename() {
-          return this.getAttribute("filename");
-        }
+																			          get filename() {
+																				            return this.getAttribute("filename");
+																					            }
 
-        set filename(newValue) {
-          this.setAttribute("filename", newValue);
-          this.resetLinks();
-        }
+																						            set filename(newValue) {
+																							              this.setAttribute("filename", newValue);
+																								                this.resetLinks();
+																										        }
 
-        resetLinks() {
-          // Verify the element has been attached to the DOM.
-          if (!this.shadowRoot) {
-            return;
-          }
+																											        resetLinks() {
+																												          // Verify the element has been attached to the DOM.
+																													            if (!this.shadowRoot) {
+																														                return;
+																																          }
 
-          this.shadowRoot.getElementById("verbose-link-box").href =
-            makeVerboseLink(this.fileId, this.filename);
-          this.shadowRoot.getElementById("short-link-box").href = makeShortLink(
-            this.fileId
-          );
+																																	            this.shadowRoot.getElementById("verbose-link-box").href =
+																																		                makeVerboseLink(this.fileId, this.filename);
+																																				          this.shadowRoot.getElementById("short-link-box").href = makeShortLink(
+																																					              this.fileId
+																																						                );
 
-          QrCreator.render(
-            {
-              text: makeShortLink(this.fileId),
-              radius: 0.5, // 0.0 to 0.5
-              ecLevel: "H", // L, M, Q, H
-              fill: "#000000", // foreground color
-              background: null, // color or null for transparent
-              size: 128, // in pixels
-            },
-            this.shadowRoot.getElementById("qr-code")
-          );
-        }
-      }
-    );
-  })();
+																																								          QrCreator.render(
+																																									              {
+																																										                    text: makeShortLink(this.fileId),
+																																												                  radius: 0.5, // 0.0 to 0.5
+																																														                ecLevel: "H", // L, M, Q, H
+																																																              fill: "#000000", // foreground color
+																																																	                    background: null, // color or null for transparent
+																																																			                  size: 128, // in pixels
+																																																					              },
+																																																						                  this.shadowRoot.getElementById("qr-code")
+																																																								            );
+																																																									            }
+																																																										          }
+																																																											      );
+																																																											        })();
 </script>
